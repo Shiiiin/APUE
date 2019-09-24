@@ -1,13 +1,16 @@
 CC=gcc
 TARGET=hello
-CFLAGS=-g -Wall -ansi -pedantic
+OBJECT=hello.o
+CPP=hello.c
+CFLAGS=-Wall -ansi -pedantic
 
 all:$(TARGET)
 
-$(TARGET):$(TARGET).o
-	$(CC) -o $@ $^
-$(TARGET).o:$(TARGET).c
-	$(CC) -c $(TARGET).c
+$(TARGET):$(OBJECT)
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(OBJECT):$(CPP)
+	$(CC) $(CFLAGS) -c $^
 
 .PHONY:clean
 
