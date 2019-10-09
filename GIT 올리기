@@ -1,0 +1,7 @@
+## github repository와 로컬이 다른 경우
+
+git pull
+git add .
+git commit -m "message"
+git push origin master
+
