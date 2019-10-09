@@ -1,0 +1,70 @@
+KEYWORD : 버퍼 크기가 파일 읽기 시간에 미치는 영향, 원자적 연산, ioctl, fcntl
+
+(이 장의 전반적이 내용은 ppt 프린트물에 정리되어 있다.)
+
+p106이후 뒷부분만 필기 했음.
+
+<gcc object link 하는 법>
+
+gcc [raw file] [object file]
+gcc -o [output file] [raw file] [object file]
+
+ex) gcc -o myprogram exercise_3-11.c err_functions.o
+
+#####메인함수      #갑자기 궁금해서 적음....
+
+The signature of main is:
+
+int main(int argc, char **argv);
+argc refers to the number of command line arguments passed in, which includes the actual name of the program, as invoked by the user.
+argv contains the actual arguments, starting with index 1. Index 0 is the program name.
+
+So, if you ran your program like this:
+
+./program hello world
+Then:
+
+argc would be 3.
+argv[0] would be "./program".
+argv[1] would be "hello".
+argv[2] would be "world".
+
+#############################
+
+비트 OR : val |= flags;  //플래그들을 켠다
+비트 AND : val &= ~flags; //플래그들을 끈다.   ~ <= 1's complement
+
+write : 기록할 자료를 !!!대기열에 등록!!!  (이 책에서 디스크 파일 WRITE : 동기적 쓰기)
+ 
+set_fl(STDOUT_FILENO, O_SYNC);   // 동기적 쓰기(SYNCHRONOUS-WRITE) 플래그 켜기 
+ 
+O_SYNC 플래그 : 1. 데이터가 모두 (캐쉬로) 전송됐는지 보장하고 리턴.  (지연된 쓰기)
+                2. 파일에 자료를 기록할 때마다 파일의 내용이 갱신 (<-> fsync fdatasync 는 명시적으로 호출되어야 파일의 내용 갱신)
+                그러나 아직 (하드 디스크등 출력장치에 기록되지 않고) 캐쉬에 있을 수 도 있다.
+             >> 데이터베이스 시스템에 응용 GOOOOD! 
+             비정상적인 시스템 실패에 대비하는 데에는, write의 호출이 반환되었다는 것이 자료가 실제로
+             디스크에 기록되었음을 뜻한다는 사실이 도움이 됨
+             근데 클록 시간& 시스템 시간이 늘어날 것임
+             
+ fcntl의 필요성:
+                셸이 파일을 열기 때문에 응용 프로그램이 O_SYNC 플래그를 설정해서 파일을 열 수는 없다.
+                >> fcntl를 이용해서 열린 !!!파일의 서술자를 알고!!!, !!!서술자의 속성들을 수정가능!!!
+                
+  
+  ioctl 함수: 장치의 입출력 연산 수행
+  
+  ...  argument : 임의의 개수의 추가적인 인수들
+  
+  /dev/fd : 서술자 n을 복제함, 주로 셸에 쓰임
+  
+  Linux에서는 실제 파일에 대한 Symbolic link를 사용하므로 /dev/fd 파일에 대해 create 호출하면
+  바탕 파일이 절단되는 결과가 생긴다.
+  
+ 
+  cat(1) 프로그램은  "-" 라는 입력 파일이름을 찾아보고, 그것을 표준입력으로 간주
+        ex) filter file2 | cat file1 - file3 | lpr (바람직하지 않은 명령어)
+            읽는 순서: file1 -> file2에 대한 filter 프로그램의 출력 -> file3
+            
+  >> /dev/fd가 지원되는경우, cat에서 "-"에 대한 특별 처리를 제거 가능
+        ex) filter file2 | cat file1 /dev/fd/0 file3 | lpr (바람직한 명령어)
+      
