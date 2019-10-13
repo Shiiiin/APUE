@@ -1,0 +1,65 @@
+#3.1
+
+대부분 디스크 입출력은 버퍼 캐시(또는 페이지 캐시)를 거쳐 간다.
+커널은 자료를 자신의 버퍼들 중 하나에 복사해 두고, 나중에 적당한 때가 되면 디스크에 기록한다 -> 지연된 쓰기
+write(2) 함수도 바로 디스크에 기록되지 않고  버퍼 캐시 안으로 들어감
+
+
+피피티안 내용:
+open(2) 함수중 O_SYNC 플래그는 buffer 안거치고 바로 disk에서 씀
+ 은행이나 응급 시스템에서 사용. 
+쓰기에 대한 IO를 수행할때 디스크에 즉시 반영된다. -> 동기식
+
+
+
+
+#3.2
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main(){
+	dup2(1,5);
+	while(1){
+		sleep(1);
+	}
+	return 0;
+}
+
+int dup2(int fd1, int fd2){
+	
+	if(fd1==fd2)
+		return fd2;
+
+	close(fd2);
+
+	int newfd[fd2];
+	int num_made =0;
+	int descriptor = -1;
+	
+	while(descripter != fd2){
+		descriptor = dup(fd1);
+		newfd[num_made] = descriptor;
+		num_made++;
+	}
+
+	for (int i =0 ; i< num_made -1; i++){
+		close(newfd[i]);
+	}
+
+	return descriptor;
+}
+
+
+#3.3~ #3.5 는 직접 서술함.
+
+
+#3.6
+lseek을 이용해서 임의의 위치로 읽기 가능 -> offset
+
+lseek은 임의의 위치에서 쓰기 불가능하다... -> write의 O_APPEND가  무조건 오프셋으로 리셋함
+
+
+내 생각: O_APPEND 플래그를 삭제하면 되지 않을까 싶음 ... 나중에 실험꼭 해봐야함
+
+
