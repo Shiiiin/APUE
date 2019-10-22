@@ -1,53 +1,76 @@
 #include <stdio.h>
 #include <fcntl.h>
+#include <malloc.h>
 
 #define MIN 1
 #define MAX 1024
-#define BUFSIZE 16
+#define BUFSIZE 2056
+
 int main(){
 
 	int i = 0;
-	int fd = 0;
-	int desc = 0;
 
 	for(i = MIN; i < MAX+1; i++){
 
 		char filename[BUFSIZE];
-		char buf[BUFSIZE];
+		char buf[2] = {0xff};
+		int fd = 0;
+		int num = 0;
+		int byteNum = 0;
 
 		sprintf(filename, "./%d.dat", i);
 	
-		if( (fd = open(filename, O_RDWR | O_CREAT, 0777)) < 0){;
-		
-			printf("%d", fd);
+		if( (fd = open(filename, O_RDWR)) < 0){
 
-			desc = read(fd, 0, buf, BUFSIZE);
+			creat(filename, 0777);
+			printf("create a file\n");
+			continue;
 
-			if(desc == 0){
-				write(filename, 1, BUFSIZE);
-			}else{
-				write(filename, desc++, BUFSIZE);
-			}
-		
 		}
+		
+		if ( (byteNum = read(fd, buf, sizeof(buf))) <0)
+		{
+			perror("failed read\n");
+			return -1;
+		}
+		
+		if( buf == 0){
+
+			num = 1;
+			sprintf(buf, "%d", num);
+
+			if((write(fd, buf, sizeof(buf))) < 0)
+			{
+				perror("failed write\n ");		
+				return -1;
+			}		
+		}else{
+			
+			num = atoi(buf);
+			num++;
+
+			if ( num == 10){
+
+				if( (remove(filename)) == 0){
+					printf("file removed\n");
+					continue;
+				}else{
+					printf("failed to remove the file\n");
+					return -1;
+				}
+					
+			}else{
+				sprintf(buf, "%d", num);
+				lseek(fd, SEEK_SET, 0);
+				write(fd, buf, sizeof(buf));
+			}
+		}
+		
+	close(filename);
 
 	}
 
+	printf("success\n");
+
 	return 0;
 }
-
-/*
-void setString(const char *ap_string){
-
-	char *p_str;
-
-	int len
-}
-no files named 1.dat~1024.dat -> creat
-
-
-if there is a file
-	if no content, put 1
-	otherwise, increment it.
-	if the content is 10, remove it
-*/
