@@ -1,0 +1,5 @@
+echo "\033[1m this a bold message\033[0m"
+echo this is a normal message
+echo "again normal"
+echo "\033[1m again bold\033[0m"
+echo "\033[7m reverse set ok\033[0m"

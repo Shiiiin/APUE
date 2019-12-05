@@ -12,6 +12,7 @@ main(int argc, char *argv[])
 	signal(SIGCHLD, childHandler);
 
 	pid = fork();
+	printf("%d asdf\n", pid);
 	if ( pid == 0 ) { //child
 		execvp(argv[2], &argv[2]);
 		perror("Limit");
@@ -25,6 +26,7 @@ main(int argc, char *argv[])
 childHandler()
 {
 	int childPid, childStatus;
+	printf("childSatus %d\n", &childStatus);
 	childPid = wait(&childStatus);
 	printf("Child %d terminated within %d seconds\n", childPid, delay);
 	exit(0);

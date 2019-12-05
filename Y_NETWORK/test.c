@@ -41,7 +41,8 @@ struct hostent {
 
 typedef struct netinfo TCPINFO; 
 
-typedef struct hostent HOSTENT;
+struct hostent *HOSTENT;
+struct sockaddr_in addr_in;
 
 TCPINFO *nsopen() {
   TCPINFO *ltcpinfo;
@@ -147,7 +148,7 @@ TCPINFO *nsread(TCPINFO *info) {
   return info;
 }
 
-
+/*
 int GetDomainName(char *addr, char*name, int namelen)
 {
 	HOSTENT *ptr = gethostbyaddr((char *)&addr, sizeof(addr), AF_INET);
@@ -165,6 +166,7 @@ int GetDomainName(char *addr, char*name, int namelen)
 	
 	return 0;
 }
+*/
 
 
 int main(int argc, char **argv) {
@@ -172,11 +174,15 @@ int main(int argc, char **argv) {
   tf = nsopen();
 
   while (nsread(tf) != (TCPINFO *)NULL)
-  {  
-     char name[256];   
-     if( GetDomainName(tf->remaddr, name, sizeof(name)) == 0)
+  {
+     memset ( &addr_in, 0, sizeof(addr_in));
+     addr_in.sin_addr.s_addr = inet_addr(tf->remaddr);
+  
+     char name[256];
+     HOSTENT = gethostbyaddr((char*)&addr_in.sin_addr, 4, AF_INET);	
+     if(HOSTENT)
      {
-   	 printf("%s:%s ---> %s:%s\t%s\t%s\n", tf->localaddr, tf->localport, name, tf->remport, tf->stat, tf->uname);
+   	 printf("%s:%s ---> %s:%s\t%s\t%s\n", tf->localaddr, tf->localport, HOSTENT->h_name, tf->remport, tf->stat, tf->uname);
      }else{
    	 printf("%s:%s ---> %s:%s\t%s\t%s\n", tf->localaddr, tf->localport, tf->remaddr, tf->remport, tf->stat, tf->uname);
      }
