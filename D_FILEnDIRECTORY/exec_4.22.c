@@ -98,7 +98,7 @@ dopath(Myfunc* func)
 	fullpath[n++] = "/";
 	fullpath[n] = 0;
 
-	if ((dp = opendir(fullpath)) == NULL) /*not available to read directory */
+	if ((dp = opendir(fullpath)) == NULL) /* not available to read directory */
 		return(func(fullpath, &statbuf, FTW_DNR));
 
 	while ((dirp = readdir(dp)) != NULL) {
