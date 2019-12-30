@@ -1,7 +1,10 @@
-# OpenSourceSW
-학교에서 배운것들
+# Advanced Programming in UNIX Environment
 
-# **오픈소스소프트웨어 조: 고경규, 박현식, 신경익**
+Note taking from class
+
+
+
+** How to use Mark Down**
 
 
 
