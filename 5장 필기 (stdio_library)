@@ -1,4 +1,4 @@
-3장            fd 중심\n
+3장            fd 중심
 표준입출력     stream 중심
 
 
@@ -34,6 +34,14 @@ line buffering: newline 문자를 만났을 때 입출력 연산 수행
 
                 **주의점**
                 1. 버퍼 크기가 고정되어 있으므로, 만일 새 줄문자가 기록되기 전에 그 버퍼가 꽉 차면 그 시점에서 입출력 연산이 수행될 수 있다.
-                2. if ( input required from ( 버퍼링 없는 스트림으로부터 || line buffering 스트림으로부터) )
+                2. if ( input required from ( case1 = 버퍼링 없는 스트림으로부터 || case2 = line buffering 스트림으로부터) )
                     #모든 line buffering 출력 스트림이 방출된다.
                     
+                    if( case1 ) 항상 커널에게 자료를 요청해야함
+                    if( case2 ) 해당 자료를 커널에게 요청해야 하는 경우에만 한정된다.
+                    
+unbuffering: 버퍼링 X ( fputs로 문자 15개를 기록 -> 그 15개의 문자가 즉시 출력 )     **stderr stream은 버퍼링이 없음**
+
+
+                    
+
