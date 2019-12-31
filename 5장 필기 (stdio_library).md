@@ -1,5 +1,5 @@
-3장            fd 중심
-##표준입출력     stream 중심
+3장            fd 중심\n
+## 표준입출력     stream 중심
 
 
 파일을 열거나 생성했을때   -> 3장       :   파일 서술자를 얻었다.
@@ -21,7 +21,7 @@ FILE 객체: fd, pointer(스트림을 위한 버퍼를 가리킴), bufsize, buf�
 
 
 
-**###Buffering**
+**### Buffering**
 : read 호출 & write 호출을 최소한으로만 사용하는 것 (응용 프로그램은 자동으로 지원 신경안써도 됨)
 
 full buffering: stdio 버퍼가 꽉차면 실제 입출력이 일어난다.
