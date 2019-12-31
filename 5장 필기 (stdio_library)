@@ -1,0 +1,39 @@
+3장            fd 중심
+##표준입출력     stream 중심
+
+
+파일을 열거나 생성했을때   -> 3장       :   파일 서술자를 얻었다.
+                          -> 표준입출력 :   파일에 스트림을 연관시켰다.
+                          
+                          
+character 들을 단일 바이트로 읽고 쓸것인지 || 다중으로 읽고 쓸것인지  -> stream의 orientation에 의해 결정
+orientation이 없는 경우 -> byte oriented 가 됨
+
+영어 -> character 하나당 byte 하나
+한글 -> character 하나당 byte 2개 (다중)  | wchar 이용
+
+
+freopen: stream의 orientation을 remove
+fwide  : stream의 orientation을 설정 (음수: 바이트지향, 양수: wchar지향, 0: 스트림의 현재 지향, 이미 지향이 설정된 경우: 설정 변경X)
+
+fopen  : stream 열때 사용 ( FILE 객체를 가리키는 포인터를 돌려줌)
+FILE 객체: fd, pointer(스트림을 위한 버퍼를 가리킴), bufsize, buf안에 있는 char 갯수, error_flag등..
+
+
+
+**###Buffering**
+: read 호출 & write 호출을 최소한으로만 사용하는 것 (응용 프로그램은 자동으로 지원 신경안써도 됨)
+
+full buffering: stdio 버퍼가 꽉차면 실제 입출력이 일어난다.
+
+flush: stdio내용을 출력대상에 기록  ( 자동으로 방출 || fflush 호출에 의해 방출)
+
+line buffering: newline 문자를 만났을 때 입출력 연산 수행
+                프로그램이 fputc를 이용하여 한 번에 문자 하나씩 출력해도 실제 입출력은 한 줄의 출력이 끝났을 때 일어남 ( 성능 저하 X)
+                ***터미널을 가리키는 스트림에 주로 쓰임***
+
+                **주의점**
+                1. 버퍼 크기가 고정되어 있으므로, 만일 새 줄문자가 기록되기 전에 그 버퍼가 꽉 차면 그 시점에서 입출력 연산이 수행될 수 있다.
+                2. if ( input required from ( 버퍼링 없는 스트림으로부터 || line buffering 스트림으로부터) )
+                    #모든 line buffering 출력 스트림이 방출된다.
+                    
