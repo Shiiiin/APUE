@@ -42,6 +42,11 @@ line buffering: newline 문자를 만났을 때 입출력 연산 수행
                     
 unbuffering: 버퍼링 X ( fputs로 문자 15개를 기록 -> 그 15개의 문자가 즉시 출력 )     **stderr stream은 버퍼링이 없음**
 
+fopen : stdio stream 열기
+fdopen: pipe or network communication 채널을 생성하는 함수가 돌려줕 fd 에서 주로 씀 
+
+
+
 
                     
 
