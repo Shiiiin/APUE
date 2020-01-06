@@ -45,7 +45,8 @@ unbuffering: 버퍼링 X ( fputs로 문자 15개를 기록 -> 그 15개의 문�
 fopen : stdio stream 열기
 fdopen: pipe or network communication 채널을 생성하는 함수가 돌려줕 fd 에서 주로 씀 
 
-
+UNIX 커널은 text 파일과 binary 파일을 구별하지 않음!!
+---> 그래서 w+와 w+b 차이가 없음
 
 
                     
